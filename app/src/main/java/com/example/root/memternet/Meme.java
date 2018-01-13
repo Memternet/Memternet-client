@@ -1,4 +1,4 @@
-package stepanov.me.memternet;
+package com.example.root.memternet;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
