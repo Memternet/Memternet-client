@@ -3,17 +3,16 @@ package com.example.root.memternet;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Pair;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 public final class Meme {
 
-    static private ArrayList<Meme> memes;
     public final String url;
     public final long id;
     private Bitmap img;
@@ -34,14 +33,16 @@ public final class Meme {
     }
 
     public static ArrayList<Meme> getMemes(long startId, int count) {
-        List<String> stringList = getUrls(startId, count);
+        ArrayList<String> stringList = getUrls(startId, count);
         if (stringList == null)
             return null;
-        memes = new ArrayList<>();
+        ArrayList<Meme> memes = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             memes.add(new Meme(startId - i, stringList.get(i), null));
         }
-        (new MemeDownloader()).execute(stringList.toArray(new String[count]));
+        Pair<ArrayList<String>, ArrayList<Meme>>[] pair = new Pair[1];
+        pair[0] = new Pair<ArrayList<String>, ArrayList<Meme>>(stringList, memes);
+        (new MemeDownloader()).execute(pair);
         return memes;
     }
 
@@ -49,7 +50,8 @@ public final class Meme {
         return img;
     }
 
-    private static class MemeDownloader extends AsyncTask<String, Void, Void> {
+    private static class MemeDownloader extends AsyncTask<Pair<ArrayList<String>, ArrayList<Meme>>,
+            Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -62,10 +64,12 @@ public final class Meme {
         }
 
         @Override
-        protected Void doInBackground(String[] urls) {
-            for (int i = 0; i < urls.length; i++) {
+        protected Void doInBackground(Pair<ArrayList<String>, ArrayList<Meme>>[] lists) {
+            ArrayList<String> urls = lists[0].first;
+            ArrayList<Meme> memes = lists[0].second;
+            for (int i = 0; i < urls.size(); i++) {
                 try {
-                    URL url = new URL(urls[i]);
+                    URL url = new URL(urls.get(i));
                     URLConnection connection = url.openConnection();
                     connection.connect();
                     memes.get(i).img = BitmapFactory.decodeStream(connection.getInputStream());
