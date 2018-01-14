@@ -1,17 +1,19 @@
 package com.example.root.memternet;
-
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.os.Handler;
 
+
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<Meme> memes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
