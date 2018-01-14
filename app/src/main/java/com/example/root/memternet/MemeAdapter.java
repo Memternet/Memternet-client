@@ -19,7 +19,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         super();
         data = new ArrayList();
     }
-    private static final int MEMECOUNT = 3;
+    private static final int MEMECOUNT = 1;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         ViewHolder (MemeView m) {

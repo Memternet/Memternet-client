@@ -10,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public final class Meme {
 
@@ -25,10 +27,23 @@ public final class Meme {
 
     private static ArrayList<String> getUrls(long startId, int count) {
         //TODO
+        MemeList memes = MemeList.parse("{'count': 1,\n" +
+                "        'memes': [\n" +
+                "            {\n" +
+                "                'id': 0,\n" +
+                "                'img_url': 'https://memepedia.ru/wp-content/uploads/2016/08/med_1426704578_00014.jpg'\n" +
+                "            }\n" +
+                "        ]}");
+        if (memes == null) {
+            return new ArrayList<String>();
+        }
+        List<MemeList.MemeObj> memesList = Arrays.asList(memes.getMemes());
         ArrayList<String> test = new ArrayList<>();
-        test.add("https://memepedia.ru/wp-content/uploads/2016/08/med_1426704578_00014.jpg");
-        test.add("http://vsekidki.ru/uploads/posts/2016-01/1453764864_l_c0788aa1.jpg");
-        test.add("http://8uh.ru/wp-content/uploads/2015/10/chto-takoe-kek-v-vkontakte.jpg");
+        for (int i = 0; i < memesList.size(); i++)
+            test.add(memesList.get(i).getImg_url());
+        //test.add("https://memepedia.ru/wp-content/uploads/2016/08/med_1426704578_00014.jpg");
+        //test.add("http://vsekidki.ru/uploads/posts/2016-01/1453764864_l_c0788aa1.jpg");
+        //test.add("http://8uh.ru/wp-content/uploads/2015/10/chto-takoe-kek-v-vkontakte.jpg");
         return test;
     }
 
