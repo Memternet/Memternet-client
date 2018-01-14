@@ -1,12 +1,15 @@
 package com.example.root.memternet;
-
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,24 +19,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button1 = findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener() {
+        final RecyclerView posts = findViewById(R.id.posts);
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        posts.setLayoutManager(lm);
+        MemeAdapter adapter = new MemeAdapter();
+        posts.setAdapter(adapter);
+        final Handler h = new Handler() {
             @Override
-            public void onClick(View v) {
-                memes = Meme.getMemes(5, 3);
+            public void handleMessage(Message msg) {
+                if (((MemeAdapter)posts.getAdapter()).isNeedUpdate())
+                    ((MemeAdapter)posts.getAdapter()).update();
             }
-        });
-        Button button2 = findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener() {
+        };
+        TimerTask tt = new TimerTask() {
             @Override
-            public void onClick(View v) {
-                ImageView imageView1 = findViewById(R.id.imageView1);
-                ImageView imageView2 = findViewById(R.id.imageView2);
-                ImageView imageView3 = findViewById(R.id.imageView3);
-                imageView1.setImageBitmap(memes.get(0).getImage());
-                imageView2.setImageBitmap(memes.get(1).getImage());
-                imageView3.setImageBitmap(memes.get(2).getImage());
+            public void run() {
+                h.sendEmptyMessage(0);
             }
-        });
+        };
+        Timer t = new Timer();
+        t.schedule(tt, 100, 100);
     }
 }
