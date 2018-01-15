@@ -19,7 +19,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         super();
         data = new ArrayList();
     }
-    private static final int MEMECOUNT = 1;
+    private static final int MEMECOUNT = 10;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         ViewHolder (MemeView m) {
@@ -41,7 +41,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position >= data.size()) {
             needUpdate = true;
-            ArrayList<Meme> newMemes = (ArrayList<Meme>) Meme.getMemes(0, MEMECOUNT);
+            ArrayList<Meme> newMemes = (ArrayList<Meme>) Meme.getMemes(MEMECOUNT);
             for (int i = 0; i < newMemes.size(); i++)
             {
                 data.add(newMemes.get(i));
