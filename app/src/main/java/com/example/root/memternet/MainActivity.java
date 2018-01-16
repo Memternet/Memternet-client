@@ -39,5 +39,7 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer t = new Timer();
         t.schedule(tt, 100, 100);
+//        ImageLoader loader;
+//        loader.start
     }
 }

@@ -27,7 +27,6 @@ public class MemeList {
             this.img_url = img_url;
         }
     }
-    int count;
     MemeObj[] memes;
 
     public MemeObj[] getMemes() {
@@ -38,30 +37,15 @@ public class MemeList {
         this.memes = memes;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-
-
-    public int getCount() {
-        return count;
-    }
-
     public static MemeList parse(String json) {
         ObjectMapper mapper = new ObjectMapper();
         MemeList ans = null;
         try {
-            JsonNode node = mapper.readTree(json);
-            Integer x = new Integer(0);
-            for (int i = 0; i < 10; i++)
-                x += i;
-            //ans = mapper.readValue(json, MemeList.class);
+            ans = mapper.readValue(json, MemeList.class);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
-        // return ans;
+        return ans;
     }
 }
