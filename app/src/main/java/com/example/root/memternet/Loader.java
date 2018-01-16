@@ -2,6 +2,7 @@ package com.example.root.memternet;
 
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 
 import java.io.BufferedReader;
@@ -51,7 +52,6 @@ public class Loader {
     }
 
     private static ArrayList<String> getUrls(long startId, int count) {
-
         URLDownloader loader = new URLDownloader();
         loader.execute(startId, (long) count);
         String server_resp = null;

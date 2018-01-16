@@ -2,6 +2,7 @@ package com.example.root.memternet;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,19 +18,21 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     }
     private static final int MEMECOUNT = 5;
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        MemeView meme;
-        ViewHolder (MemeView m) {
+        //MemeView meme;
+        TextView t;
+        ViewHolder (TextView m) {
             super(m);
-            meme = m;
+            //meme = m;
+            t = m;
         }
     }
 
     @Override
     public MemeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        MemeView v = new MemeView(parent.getContext());
-        //TextView t = new TextView(parent.getContext());
-        ViewHolder vh = new ViewHolder(v);
+        //MemeView v = new MemeView(parent.getContext());
+        TextView t = new TextView(parent.getContext());
+        ViewHolder vh = new ViewHolder(t);
         return vh;
     }
 
@@ -37,14 +40,16 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position >= data.size()) {
             needUpdate = true;
-            ArrayList<Meme> newMemes = (ArrayList<Meme>) Loader.getMemes(MEMECOUNT);
-            for (int i = 0; i < newMemes.size(); i++)
-            {
-                data.add(newMemes.get(i));
-            }
+//            ArrayList<Meme> newMemes = (ArrayList<Meme>) Loader.getMemes(MEMECOUNT);
+//            for (int i = 0; i < newMemes.size(); i++)
+//            {
+//                data.add(newMemes.get(i));
+//            }
+            data.add(new Meme(1, "", null));
         }
         if (position < data.size())
-            holder.meme.setMeme(data.get(position));
+            //holder.meme.setMeme(data.get(position));
+            holder.t.setText(String.valueOf(position));
     }
 
     public void update() {
