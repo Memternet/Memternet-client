@@ -5,10 +5,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-/**
- * Created by root on 13.01.18.
- */
-
 public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     ArrayList<Meme> data;
     boolean needUpdate = false;
@@ -19,7 +15,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         super();
         data = new ArrayList();
     }
-    private static final int MEMECOUNT = 10;
+    private static final int MEMECOUNT = 5;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         ViewHolder (MemeView m) {
@@ -41,13 +37,14 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position >= data.size()) {
             needUpdate = true;
-            ArrayList<Meme> newMemes = (ArrayList<Meme>) Meme.getMemes(MEMECOUNT);
+            ArrayList<Meme> newMemes = (ArrayList<Meme>) Loader.getMemes(MEMECOUNT);
             for (int i = 0; i < newMemes.size(); i++)
             {
                 data.add(newMemes.get(i));
             }
         }
-        holder.meme.setMeme(data.get(position));
+        if (position < data.size())
+            holder.meme.setMeme(data.get(position));
     }
 
     public void update() {
