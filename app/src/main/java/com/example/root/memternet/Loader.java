@@ -15,14 +15,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Loader {
-
+    private static long lastId = -1;
+    private static final String SERVER_ADR = "http://10.23.44.178:8080/memes";
     private static class URLDownloader extends AsyncTask<Long, Void, String>
     {
         @Override
         protected String doInBackground(Long... longs) {
             long startId = longs[0];
             long count = longs[1];
-            String ip = "http://10.23.44.178:8080/memes";
+            String ip = SERVER_ADR;
             String server_resp;
             try {
                 String startIdString = "";
@@ -62,13 +63,17 @@ public class Loader {
         }
 
         MemeList memes = MemeList.parse(server_resp);
+        if (memes == null)
+            return new ArrayList<>();
         List<MemeList.MemeObj> memesList = Arrays.asList(memes.getMemes());
 
         ArrayList<String> test = new ArrayList<>();
 
-        for (int i = 0; i < memesList.size(); i++)
+        for (int i = 0; i < memesList.size(); i++) {
+            if (lastId == -1 || lastId >= memesList.get(i).getId())
+                lastId = memesList.get(i).getId() - 1;
             test.add(memesList.get(i).getImg_url());
-
+        }
         return test;
     }
 
@@ -86,7 +91,7 @@ public class Loader {
     }
 
     public static ArrayList<Meme> getMemes(int count) {
-        return getMemes(-1, count);
+        return getMemes(lastId, count);
     }
 
     private static class MemeDownloader extends AsyncTask<Pair<ArrayList<String>, ArrayList<Meme>>,
