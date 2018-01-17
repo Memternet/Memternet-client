@@ -24,6 +24,7 @@ public class MemeView extends CardView {
         img = new ImageView(context);
         Button button = new Button(context);
         //super.addView(button, 200, 200);
+        setElevation(100);
         super.addView(memeText);
         super.addView(img);
 
