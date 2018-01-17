@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Loader {
     private static long lastId = -1;
-    private static final String SERVER_ADR = "http://10.23.44.178:8080/memes";
+    private static final String SERVER_ADR = "http://memes.kotim.ru/memes/";
     private static class URLDownloader extends AsyncTask<Long, Void, String>
     {
         @Override
