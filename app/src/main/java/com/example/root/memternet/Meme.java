@@ -3,8 +3,8 @@ package com.example.root.memternet;
 import android.graphics.Bitmap;
 
 public final class Meme {
-    public final String url;
-    public final long id;
+    private String url;
+    private long id;
     private Bitmap img;
 
     public Meme(long id, String url, Bitmap bitmap) {
@@ -13,11 +13,27 @@ public final class Meme {
         this.img = bitmap;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
     public void setImg(Bitmap img) {
         this.img = img;
     }
 
-    public Bitmap getImage() {
+    public Bitmap getImg() {
         return img;
     }
 }
