@@ -1,9 +1,11 @@
 package com.example.root.memternet;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,6 +76,7 @@ public class Loader {
                 lastId = memesList.get(i).getId() - 1;
             test.add(memesList.get(i).getImg_url());
         }
+
         return test;
     }
 
@@ -117,7 +120,8 @@ public class Loader {
                     URL url = new URL(urls.get(i));
                     URLConnection connection = url.openConnection();
                     connection.connect();
-                    memes.get(i).setImg(BitmapFactory.decodeStream(connection.getInputStream()));
+                    Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+                    memes.get(i).setImg(bitmap);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
