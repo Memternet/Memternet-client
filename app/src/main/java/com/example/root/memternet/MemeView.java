@@ -18,14 +18,15 @@ public class MemeView extends CardView {
         final int margin = (int)(16 * context.getResources().getDisplayMetrics().density);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(margin, margin / 2, margin, margin / 2);
-        setElevation(50);
+        super.setElevation(50);
         super.setLayoutParams(lp);
         memeText = new TextView(context);
         img = new ImageView(context);
+        super.setBackgroundColor(/*getResources().getColor(R.color.lightOrange)*/0xb3d9ff);
         Button button = new Button(context);
         //super.addView(button, 200, 200);
         setElevation(100);
-        super.addView(memeText);
+        //super.addView(memeText);
         super.addView(img);
 
     }

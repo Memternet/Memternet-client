@@ -87,6 +87,7 @@ public class Loader {
         test.add("http://vsekidki.ru/uploads/posts/2016-01/1453764864_l_c0788aa1.jpg");
         test.add("http://bipbap.ru/wp-content/uploads/2017/09/Cool-High-Resolution-Wallpaper-1920x1080.jpg");
         test.add("http://bipbap.ru/wp-content/uploads/2017/08/29062339.jpg");
+        test.add("http://mirpozitiva.ru/uploads/posts/2016-09/1474011210_15.jpg");
         return test;
     }
 
