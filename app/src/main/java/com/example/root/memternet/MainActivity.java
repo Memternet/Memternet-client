@@ -1,6 +1,7 @@
 package com.example.root.memternet;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Meme> memes;
+    MemeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer t = new Timer();
         t.schedule(tt, 100, 100);
-//        ImageLoader loader;
-//        loader.start
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return adapter;
     }
 }

@@ -30,7 +30,8 @@ public class MemeView extends CardView {
 
     }
     public void setMeme(Meme meme) {
-        img.setImageBitmap(meme.getImage());
+        img.setImageBitmap(meme.getImg());
+        memeText.setText("Meme #" + String.valueOf(meme.getId()));
         //memeText.setText("Meme! " + String.valueOf(Math.random()));
     }
 }
