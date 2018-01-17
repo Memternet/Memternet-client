@@ -3,8 +3,10 @@ package com.example.root.memternet;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,7 +33,15 @@ public class MemeView extends CardView {
 
     }
     public void setMeme(Meme meme) {
-        img.setImageBitmap(meme.getImg());
+        if (meme.getImg() == null)
+            return;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        Bitmap bitmap = meme.getImg();
+        double k = (double)displayMetrics.widthPixels / bitmap.getWidth();
+        img.setImageBitmap(Bitmap.createScaledBitmap(bitmap,(int)(k * bitmap.getWidth()),
+                (int)(k * bitmap.getHeight()), false));
         memeText.setText("Meme #" + String.valueOf(meme.getId()));
         //memeText.setText("Meme! " + String.valueOf(Math.random()));
     }

@@ -12,12 +12,10 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public boolean isNeedUpdate() {
         return needUpdate;
     }
-    private int displayWidth;
 
-    MemeAdapter(int w) {
+    MemeAdapter() {
         super();
         data = new ArrayList();
-        displayWidth = w;
     }
     private static final int MEMECOUNT = 5;
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +41,6 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position >= data.size()) {
             needUpdate = true;
-            Loader.setDisplayWidth(displayWidth);
             ArrayList<Meme> newMemes = Loader.getMemes(MEMECOUNT);
             for (int i = 0; i < newMemes.size(); i++)
             {

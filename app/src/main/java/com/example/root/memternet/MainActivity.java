@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         posts.setLayoutManager(lm);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        MemeAdapter adapter = new MemeAdapter(displayMetrics.widthPixels);
+        MemeAdapter adapter = new MemeAdapter();
         posts.setAdapter(adapter);
         final Handler h = new Handler() {
             @Override

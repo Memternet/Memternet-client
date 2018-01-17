@@ -19,13 +19,7 @@ import java.util.List;
 
 public class Loader {
     private static long lastId = -1;
-    private static int displayWidth;
     private static final String SERVER_ADR = "http://10.23.44.178:8080/memes";
-
-    public static void setDisplayWidth(int w)
-    {
-        displayWidth = w;
-    }
     private static class URLDownloader extends AsyncTask<Long, Void, String>
     {
         @Override
@@ -101,7 +95,7 @@ public class Loader {
             memes.add(new Meme(lastId + n - i, stringList.get(i), null));
         }
         Pair<ArrayList<String>, ArrayList<Meme>> pair = new Pair<>(stringList, memes);
-        (new MemeDownloader(Loader.displayWidth)).execute(pair);
+        (new MemeDownloader()).execute(pair);
         return memes;
     }
 
@@ -111,13 +105,6 @@ public class Loader {
 
     private static class MemeDownloader extends AsyncTask<Pair<ArrayList<String>, ArrayList<Meme>>,
             Void, Void> {
-
-        private int displayWidth;
-
-        MemeDownloader(int w)
-        {
-            this.displayWidth = w;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -139,9 +126,6 @@ public class Loader {
                     URLConnection connection = url.openConnection();
                     connection.connect();
                     Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
-                    double k = ((double)displayWidth / bitmap.getWidth());
-                    bitmap = Bitmap.createScaledBitmap(bitmap, (int)(k * bitmap.getWidth())
-                            , (int)(k * bitmap.getHeight()), false);
                     memes.get(i).setImg(bitmap);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
