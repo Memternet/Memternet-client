@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 
 
 import java.util.ArrayList;
@@ -22,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView posts = findViewById(R.id.posts);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         posts.setLayoutManager(lm);
-        MemeAdapter adapter = new MemeAdapter();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        MemeAdapter adapter = new MemeAdapter(displayMetrics.widthPixels);
         posts.setAdapter(adapter);
         final Handler h = new Handler() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.root.memternet;
 
 import android.graphics.Bitmap;
+import android.view.Display;
 
 public final class Meme {
     public final String url;
