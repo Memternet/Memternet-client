@@ -82,8 +82,9 @@ public class Loader {
         if (stringList == null)
             return null;
         ArrayList<Meme> memes = new ArrayList<>();
-        for (int i = 0; i < Math.min(count, stringList.size()); i++) {
-            memes.add(new Meme(startId - i, stringList.get(i), null));
+        int n = Math.min(count, stringList.size());
+        for (int i = 0; i < n; i++) {
+            memes.add(new Meme(lastId + n - i, stringList.get(i), null));
         }
         Pair<ArrayList<String>, ArrayList<Meme>> pair = new Pair<>(stringList, memes);
         (new MemeDownloader()).execute(pair);

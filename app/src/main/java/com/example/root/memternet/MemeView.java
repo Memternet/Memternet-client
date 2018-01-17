@@ -14,11 +14,15 @@ public class MemeView extends CardView {
         super.setLayoutParams(lp);
         memeText = new TextView(context);
         img = new ImageView(context);
+        lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        img.setLayoutParams(lp);
         super.addView(memeText);
         super.addView(img);
+        super.setRadius(20);
     }
     public void setMeme(Meme meme) {
         img.setImageBitmap(meme.getImg());
+        memeText.setText("Meme #" + String.valueOf(meme.getId()));
         //memeText.setText("Meme! " + String.valueOf(Math.random()));
     }
 }
