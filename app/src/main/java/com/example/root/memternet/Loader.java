@@ -51,6 +51,12 @@ public class Loader {
             }
             return server_resp;
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
     }
 
     private static ArrayList<String> getUrls(long startId, int count) {
