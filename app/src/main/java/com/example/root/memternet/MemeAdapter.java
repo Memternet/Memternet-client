@@ -40,12 +40,12 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position >= data.size()) {
+        if (position >= data.size() && !needUpdate) {
             needUpdate = true;
             Log.d("test", "test");
             Loader.getMemes(MEMECOUNT, data);
         }
-        else
+        else if (position < data.size())
             holder.meme.setMeme(data.get(position));
             //holder.t.setText(String.valueOf(position));
     }

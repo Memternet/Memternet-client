@@ -67,11 +67,13 @@ public class Loader {
         return test;
     }
 
-    public static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
+    public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
+        ArrayList<Meme> newMemes = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            to.add(new Meme());
+            newMemes.add(new Meme());
         }
-        (new MemeDownloader()).execute(startId, count, new Sublist<Meme>(to, to.size() - count, to.size()));
+        (new MemeDownloader()).execute(startId, count, newMemes);
+        to.addAll(newMemes);
     }
 
     public static void getMemes(int count, ArrayList<Meme> to) {
@@ -95,7 +97,7 @@ public class Loader {
         protected Void doInBackground(Object... params) {
             Long startId = (Long) params[0];
             Integer count = (Integer) params[1];
-            Sublist<Meme> memes = (Sublist<Meme>) params[2];
+            List<Meme> memes = (List<Meme>) params[2];
             ArrayList<String> urls = Loader.getUrls(startId, count);
             for (int i = 0; i < urls.size(); i++) {
                 try {
