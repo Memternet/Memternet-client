@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Memternet</string>
+    <string name="title_activity_authorisation">AuthorisationActivity</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="authorisation">Authorisation</string>
+    <string name="next">Next</string>
 </resources>

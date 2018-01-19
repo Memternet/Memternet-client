@@ -12,6 +12,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public boolean isNeedUpdate() {
         return needUpdate;
     }
+
     MemeAdapter() {
         super();
         data = new ArrayList();

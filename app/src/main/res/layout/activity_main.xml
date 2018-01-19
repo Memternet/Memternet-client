@@ -9,6 +9,9 @@
         android:id="@+id/posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:background="@color/lightBlue"
+        android:paddingTop="16dp"
+        android:foregroundGravity="center_horizontal">
     </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>

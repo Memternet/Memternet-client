@@ -1,9 +1,11 @@
 package com.example.root.memternet;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,28 +54,12 @@ public class Loader {
     }
 
     private static ArrayList<String> getUrls(long startId, int count) {
-        URLDownloader loader = new URLDownloader();
-        loader.execute(startId, (long) count);
-        String server_resp = null;
-        try {
-            server_resp = loader.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-
-        MemeList memes = MemeList.parse(server_resp);
-        if (memes == null)
-            return new ArrayList<>();
-        List<MemeList.MemeObj> memesList = Arrays.asList(memes.getMemes());
-
         ArrayList<String> test = new ArrayList<>();
-
-        for (int i = 0; i < memesList.size(); i++) {
-            if (lastId == -1 || lastId >= memesList.get(i).getId())
-                lastId = memesList.get(i).getId() - 1;
-            test.add(memesList.get(i).getImg_url());
-        }
+        test.add("https://memepedia.ru/wp-content/uploads/2016/08/med_1426704578_00014.jpg");
+        test.add("http://vsekidki.ru/uploads/posts/2016-01/1453764864_l_c0788aa1.jpg");
+        test.add("http://bipbap.ru/wp-content/uploads/2017/09/Cool-High-Resolution-Wallpaper-1920x1080.jpg");
+        test.add("http://bipbap.ru/wp-content/uploads/2017/08/29062339.jpg");
+        test.add("http://mirpozitiva.ru/uploads/posts/2016-09/1474011210_15.jpg");
         return test;
     }
 
@@ -117,7 +103,8 @@ public class Loader {
                     URL url = new URL(urls.get(i));
                     URLConnection connection = url.openConnection();
                     connection.connect();
-                    memes.get(i).setImg(BitmapFactory.decodeStream(connection.getInputStream()));
+                    Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+                    memes.get(i).setImg(bitmap);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

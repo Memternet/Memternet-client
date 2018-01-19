@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 
 
 import java.util.ArrayList;
@@ -42,12 +43,11 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer t = new Timer();
         t.schedule(tt, 100, 100);
-//        ImageLoader loader;
-//        loader.start
     }
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return adapter;
     }
+
 }
