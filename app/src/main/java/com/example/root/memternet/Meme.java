@@ -14,6 +14,12 @@ public final class Meme {
         this.img = bitmap;
     }
 
+    Meme() {
+        this.id = 0;
+        this.url = null;
+        this.img = null;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

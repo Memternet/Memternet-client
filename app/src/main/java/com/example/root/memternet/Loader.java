@@ -20,56 +20,37 @@ import java.util.List;
 public class Loader {
     private static long lastId = -1;
     private static final String SERVER_ADR = "http://memes.kotim.ru/memes/";
-    private static class URLDownloader extends AsyncTask<Long, Void, String>
-    {
-        @Override
-        protected String doInBackground(Long... longs) {
-            long startId = longs[0];
-            long count = longs[1];
-            String ip = SERVER_ADR;
-            String server_resp;
-            try {
-                String startIdString = "";
-                if (startId != -1)
-                    startIdString = "start_id=" + String.valueOf(startId) + "&";
-                URL url = new URL(ip + "?" + startIdString +
-                        "count=" +
-                        String.valueOf(count));
-                URLConnection connection = url.openConnection();
-                connection.connect();
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder builder = new StringBuilder();
-                String line;
-                while ((line = in.readLine()) != null)
-                    builder.append(line);
-                in.close();
-                server_resp = builder.toString();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                return "";
-            }
-            return server_resp;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
+    private static String getJSON(long startId, int count) {
+        String ip = SERVER_ADR;
+        String server_resp;
+        try {
+            String startIdString = "";
+            if (startId != -1)
+                startIdString = "start_id=" + String.valueOf(startId) + "&";
+            URL url = new URL(ip + "?" + startIdString +
+                    "count=" +
+                    String.valueOf(count));
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null)
+                builder.append(line);
+            in.close();
+            server_resp = builder.toString();
         }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+        return server_resp;
     }
 
     private static ArrayList<String> getUrls(long startId, int count) {
-        URLDownloader loader = new URLDownloader();
-        loader.execute(startId, (long) count);
-        String server_resp = null;
-        try {
-            server_resp = loader.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-
+        Log.d("async", "begin");
+        String server_resp = getJSON(startId, count);
         MemeList memes = MemeList.parse(server_resp);
         if (memes == null)
             return new ArrayList<>();
@@ -82,30 +63,22 @@ public class Loader {
                 lastId = memesList.get(i).getId() - 1;
             test.add(memesList.get(i).getImg_url());
         }
-
+        Log.d("async", "end");
         return test;
     }
 
-    public static ArrayList<Meme> getMemes(long startId, int count) {
-        ArrayList<String> stringList = getUrls(startId, count);
-        if (stringList == null)
-            return null;
-        ArrayList<Meme> memes = new ArrayList<>();
-        int n = Math.min(count, stringList.size());
-        for (int i = 0; i < n; i++) {
-            memes.add(new Meme(lastId + n - i, stringList.get(i), null));
+    public static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
+        for (int i = 0; i < count; i++) {
+            to.add(new Meme());
         }
-        Pair<ArrayList<String>, ArrayList<Meme>> pair = new Pair<>(stringList, memes);
-        (new MemeDownloader()).execute(pair);
-        return memes;
+        (new MemeDownloader()).execute(startId, count, new Sublist<Meme>(to, to.size() - count, to.size()));
     }
 
-    public static ArrayList<Meme> getMemes(int count) {
-        return getMemes(lastId, count);
+    public static void getMemes(int count, ArrayList<Meme> to) {
+        getMemes(lastId, count, to);
     }
 
-    private static class MemeDownloader extends AsyncTask<Pair<ArrayList<String>, ArrayList<Meme>>,
-            Void, Void> {
+    private static class MemeDownloader extends AsyncTask<Object, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -115,12 +88,15 @@ public class Loader {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Log.d("async", "OK");
         }
 
         @Override
-        protected Void doInBackground(Pair<ArrayList<String>, ArrayList<Meme>>... lists) {
-            ArrayList<String> urls = lists[0].first;
-            ArrayList<Meme> memes = lists[0].second;
+        protected Void doInBackground(Object... params) {
+            Long startId = (Long) params[0];
+            Integer count = (Integer) params[1];
+            Sublist<Meme> memes = (Sublist<Meme>) params[2];
+            ArrayList<String> urls = Loader.getUrls(startId, count);
             for (int i = 0; i < urls.size(); i++) {
                 try {
                     URL url = new URL(urls.get(i));
@@ -128,9 +104,9 @@ public class Loader {
                     connection.connect();
                     Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
                     memes.get(i).setImg(bitmap);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                    memes.get(i).setUrl(urls.get(0));
+                    memes.get(i).setId(lastId + urls.size() - i);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

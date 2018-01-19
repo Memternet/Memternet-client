@@ -1,6 +1,7 @@
 package com.example.root.memternet;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -41,14 +42,10 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position >= data.size()) {
             needUpdate = true;
-            ArrayList<Meme> newMemes = Loader.getMemes(MEMECOUNT);
-            for (int i = 0; i < newMemes.size(); i++)
-            {
-                data.add(newMemes.get(i));
-            }
-            //data.add(new Meme(1, "", null));
+            Log.d("test", "test");
+            Loader.getMemes(MEMECOUNT, data);
         }
-        if (position < data.size())
+        else
             holder.meme.setMeme(data.get(position));
             //holder.t.setText(String.valueOf(position));
     }
