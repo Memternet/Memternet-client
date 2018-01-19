@@ -49,4 +49,5 @@ public class MainActivity extends AppCompatActivity {
     public Object onRetainCustomNonConfigurationInstance() {
         return adapter;
     }
+
 }

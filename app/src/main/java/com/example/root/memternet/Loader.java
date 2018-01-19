@@ -20,7 +20,6 @@ import java.util.List;
 public class Loader {
     private static long lastId = -1;
     private static final String SERVER_ADR = "http://memes.kotim.ru/memes/";
-
     private static String getJSON(long startId, int count) {
         String ip = SERVER_ADR;
         String server_resp;
