@@ -7,11 +7,13 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MemeView extends CardView {
     TextView memeText;
     ImageView img;
+
     MemeView (Context context) {
         super(context);
         final int margin = (int)(16 * context.getResources().getDisplayMetrics().density);
@@ -25,7 +27,7 @@ public class MemeView extends CardView {
         Button button = new Button(context);
         //super.addView(button, 200, 200);
         setElevation(100);
-        //super.addView(memeText);
+        super.addView(memeText);
         super.addView(img);
     }
     public void setMeme(Meme meme) {
@@ -39,6 +41,5 @@ public class MemeView extends CardView {
         img.setImageBitmap(Bitmap.createScaledBitmap(bitmap,(int)(k * bitmap.getWidth()),
                 (int)(k * bitmap.getHeight()), false));
         memeText.setText("Meme #" + String.valueOf(meme.getId()));
-        //memeText.setText("Meme! " + String.valueOf(Math.random()));
     }
 }

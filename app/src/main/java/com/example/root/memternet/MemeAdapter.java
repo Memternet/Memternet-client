@@ -1,9 +1,13 @@
 package com.example.root.memternet;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         //TextView t;
+        ProgressBar pb = null;
         ViewHolder (MemeView m) {
             super(m);
             meme = m;
@@ -40,14 +45,17 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         if (position >= data.size() && !needUpdate) {
             needUpdate = true;
-            Log.d("test", "test");
+            //Log.d("test", "test");
             Loader.getMemes(MEMECOUNT, data);
         }
-        else if (position < data.size())
+        else if (position < data.size()) {
             holder.meme.setMeme(data.get(position));
+            holder.meme.memeText.setText(String.valueOf(position));
             //holder.t.setText(String.valueOf(position));
+        }
     }
 
     public void update() {
