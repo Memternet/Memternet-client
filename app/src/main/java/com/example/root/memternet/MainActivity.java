@@ -1,4 +1,5 @@
 package com.example.root.memternet;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer t = new Timer();
         t.schedule(tt, 100, 100);
+        startActivity(new Intent(this, AuthorisationActivity.class));
     }
 
     @Override
