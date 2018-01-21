@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -84,9 +85,16 @@ public class MemeView extends CardView {
         this.setLayoutParams(gen);
         LayoutParams lp = new LayoutParams(size, size, Gravity.BOTTOM);
         lp.setMargins(margin, 0, 0, margin / 3);
-        super.addView(button1, lp);
+        addView(button1, lp);
         LayoutParams lp2 = new LayoutParams(size, size, Gravity.BOTTOM);
         lp2.setMargins(2 * margin + size, 0, 0, 0);
-        super.addView(button2, lp2);
+        addView(button2, lp2);
+        TextView textView = new TextView(getContext());
+        LayoutParams lp3 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM);
+        lp3.setMargins(3 * margin + 2 * size, 0, 0, margin / 3);
+        textView.setText(String.valueOf(meme.getRating()));
+        textView.setTextSize(15);
+        addView(textView, lp3);
     }
 }

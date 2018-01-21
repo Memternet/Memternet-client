@@ -9,11 +9,20 @@ public final class Meme {
     private Bitmap img;
     final public static int LIKED = 0, DISLIKED = 1, OTHER = 2;
     private int state = OTHER;
+    private int rating;
 
     public Meme(long id, String url, Bitmap bitmap) {
         this.id = id;
         this.url = url;
         this.img = bitmap;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public void setState(int s)
