@@ -113,7 +113,9 @@ public class Loader {
                     URL url = new URL(urls.get(i));
                     URLConnection connection = url.openConnection();
                     connection.connect();
+                    Log.d("img", "start");
                     Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+                    Log.d("img", "end");
                     memes.get(i).setImg(bitmap);
                     memes.get(i).setUrl(urls.get(0));
                     memes.get(i).setId(lastId + urls.size() - i);

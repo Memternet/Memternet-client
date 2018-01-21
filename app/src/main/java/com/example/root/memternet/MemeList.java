@@ -10,7 +10,7 @@ public class MemeList {
     static class MemeObj {
         int id;
         String img_url;
-
+        int my_score, rating;
         public int getId() {
             return id;
         }
@@ -21,6 +21,22 @@ public class MemeList {
 
         public String getImg_url() {
             return img_url;
+        }
+
+        public void setMy_score(int my_score) {
+            this.my_score = my_score;
+        }
+
+        public void setRating(int rating) {
+            this.rating = rating;
+        }
+
+        public int getMy_score() {
+            return my_score;
+        }
+
+        public int getRating() {
+            return rating;
         }
 
         public void setImg_url(String img_url) {
