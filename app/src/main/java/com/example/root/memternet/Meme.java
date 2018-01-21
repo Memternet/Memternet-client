@@ -7,6 +7,8 @@ public final class Meme {
     private String url;
     private long id;
     private Bitmap img;
+    final public static int LIKED = 0, DISLIKED = 1, OTHER = 2;
+    private int state = OTHER;
 
     public Meme(long id, String url, Bitmap bitmap) {
         this.id = id;
@@ -18,6 +20,16 @@ public final class Meme {
         this.id = 0;
         this.url = null;
         this.img = null;
+    }
+
+    public void setState(int s)
+    {
+        state = s;
+    }
+
+    public int getState()
+    {
+        return state;
     }
 
     public void setId(long id) {

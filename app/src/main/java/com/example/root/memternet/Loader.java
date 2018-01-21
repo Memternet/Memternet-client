@@ -66,6 +66,8 @@ public class Loader {
     }
 
     public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
+        if (lastId == 0)
+            return;
         Log.d("geter", String.valueOf(lock));
         if (lock)
             return;

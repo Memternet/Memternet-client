@@ -53,7 +53,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         }
         else if (position < data.size()) {
             holder.meme.setMeme(data.get(position));
-            holder.meme.memeText.setText(String.valueOf(position));
+            //holder.meme.memeText.setText(String.valueOf(position));
             //holder.t.setText(String.valueOf(position));
         }
     }
