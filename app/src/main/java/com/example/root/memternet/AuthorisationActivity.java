@@ -16,16 +16,16 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 public class AuthorisationActivity extends AppCompatActivity {
-    Button btn;
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
-    private static final String TOKEN = "739811929483-kqjj4b74vc70ft49n6pkh28u2jbm74vj.apps.googleusercontent.com";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorisation);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(TOKEN)
+                .requestIdToken("739811929483-66f4haj6faa78a2lksi9i80ae5nqqarj.apps.googleusercontent.com")
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
@@ -66,6 +66,6 @@ public class AuthorisationActivity extends AppCompatActivity {
     }
 
     private void loggedIn(GoogleSignInAccount account) {
-        Log.d("Google Auth", account.getEmail());
+        Log.d("Google Auth", account.getIdToken());
     }
 }
