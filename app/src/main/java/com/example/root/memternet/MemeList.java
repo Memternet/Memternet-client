@@ -43,13 +43,13 @@ public class MemeList {
             this.img_url = img_url;
         }
     }
-    MemeObj[] memes;
+    Meme[] memes;
 
-    public MemeObj[] getMemes() {
+    public Meme[] getMemes() {
         return memes;
     }
 
-    public void setMemes(MemeObj[] memes) {
+    public void setMemes(Meme[] memes) {
         this.memes = memes;
     }
 

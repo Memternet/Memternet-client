@@ -1,25 +1,45 @@
 package com.example.root.memternet;
 
 import android.graphics.Bitmap;
-import android.view.Display;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class Meme {
-    private String url;
+    private String img_url;
     private long id;
+    @JsonIgnore
     private Bitmap img;
+    private int rating, my_score;
     final public static int LIKED = 0, DISLIKED = 1, OTHER = 2;
+    @JsonIgnore
     private int state = OTHER;
 
-    public Meme(long id, String url, Bitmap bitmap) {
+    public Meme(long id, String img_url, Bitmap bitmap) {
         this.id = id;
-        this.url = url;
+        this.img_url = img_url;
         this.img = bitmap;
     }
 
     Meme() {
         this.id = 0;
-        this.url = null;
+        this.img_url = null;
         this.img = null;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public void setMy_score(int my_score) {
+        this.my_score = my_score;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public int getMy_score() {
+        return my_score;
     }
 
     public void setState(int s)
@@ -40,12 +60,12 @@ public final class Meme {
         return id;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
-    public String getUrl() {
-        return url;
+    public String getImg_url() {
+        return img_url;
     }
 
     public void setImg(Bitmap img) {

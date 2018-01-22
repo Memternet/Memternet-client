@@ -30,6 +30,7 @@ public class Loader {
                     "count=" +
                     String.valueOf(count));
             URLConnection connection = url.openConnection();
+            connection.setRequestProperty("Authorization", "Token " + Token.id);
             connection.connect();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder builder = new StringBuilder();
@@ -46,23 +47,13 @@ public class Loader {
         return server_resp;
     }
 
-    private static synchronized ArrayList<String> getUrls(long startId, int count) {
+    private static synchronized List<Meme> getUrls(long startId, int count) {
         Log.d("async", "begin");
         String server_resp = getJSON(startId, count);
         MemeList memes = MemeList.parse(server_resp);
         if (memes == null)
             return new ArrayList<>();
-        List<MemeList.MemeObj> memesList = Arrays.asList(memes.getMemes());
-
-        ArrayList<String> test = new ArrayList<>();
-
-        for (int i = 0; i < memesList.size(); i++) {
-            if (lastId == -1 || lastId >= memesList.get(i).getId())
-                lastId = memesList.get(i).getId() - 1;
-            test.add(memesList.get(i).getImg_url());
-        }
-        Log.d("async", "end");
-        return test;
+        return Arrays.asList(memes.getMemes());
     }
 
     public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
@@ -77,7 +68,7 @@ public class Loader {
         for (int i = 0; i < count; i++) {
             newMemes.add(new Meme());
         }
-        (new MemeDownloader()).execute(startId, count, newMemes, to);
+        (new MemeDownloader()).execute(startId, count, to);
         //to.addAll(newMemes);
     }
 
@@ -103,22 +94,21 @@ public class Loader {
         protected List<Meme>[] doInBackground(Object... params) {
             Long startId = (Long) params[0];
             Integer count = (Integer) params[1];
-            List<Meme> memes = (List<Meme>) params[2];
-            List<Meme> to = (List<Meme>) params[3];
-            ArrayList<String> urls = Loader.getUrls(startId, count);
-            while (memes.size() > urls.size())
-                memes.remove(memes.size() - 1);
-            for (int i = 0; i < urls.size(); i++) {
+            //List<Meme> memes = (List<Meme>) params[2];
+            List<Meme> to = (List<Meme>) params[2];
+            //ArrayList<String> urls = Loader.getUrls(startId, count);
+            List<Meme> memes = Loader.getUrls(startId, count);
+            for (int i = 0; i < memes.size(); i++) {
                 try {
-                    URL url = new URL(urls.get(i));
+                    if (lastId == -1 || lastId >= memes.get(i).getId())
+                        lastId = memes.get(i).getId() - 1;
+                    URL url = new URL(memes.get(i).getImg_url());
                     URLConnection connection = url.openConnection();
                     connection.connect();
                     Log.d("img", "start");
                     Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
                     Log.d("img", "end");
                     memes.get(i).setImg(bitmap);
-                    memes.get(i).setUrl(urls.get(0));
-                    memes.get(i).setId(lastId + urls.size() - i);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

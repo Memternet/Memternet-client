@@ -65,10 +65,12 @@ public class MemeView extends CardView {
                 if (meme.getState() != Meme.LIKED) {
                     button1.setBackground(getResources().getDrawable(R.drawable.liked));
                     meme.setState(Meme.LIKED);
+                    LikeSender.sendLike(meme.getId(), 1);
                 }
                 else {
                     button1.setBackground(getResources().getDrawable(R.drawable.upvote));
                     meme.setState(Meme.OTHER);
+                    LikeSender.sendLike(meme.getId(), 0);
                 }
                 button2.setBackground(getResources().getDrawable(R.drawable.downvote));
             }
@@ -79,10 +81,12 @@ public class MemeView extends CardView {
                 if (meme.getState() != Meme.DISLIKED) {
                     button2.setBackground(getResources().getDrawable(R.drawable.disliked));
                     meme.setState(Meme.DISLIKED);
+                    LikeSender.sendLike(meme.getId(), -1);
                 }
                 else {
                     button2.setBackground(getResources().getDrawable(R.drawable.downvote));
                     meme.setState(Meme.OTHER);
+                    LikeSender.sendLike(meme.getId(), 0);
                 }
                 button1.setBackground(getResources().getDrawable(R.drawable.upvote));
             }

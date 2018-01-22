@@ -26,6 +26,7 @@ public class AuthorisationActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("739811929483-66f4haj6faa78a2lksi9i80ae5nqqarj.apps.googleusercontent.com")
+                .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
@@ -67,5 +68,7 @@ public class AuthorisationActivity extends AppCompatActivity {
 
     private void loggedIn(GoogleSignInAccount account) {
         Log.d("Google Auth", account.getIdToken());
+        Token.id = account.getIdToken();
+        finish();
     }
 }
