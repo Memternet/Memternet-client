@@ -10,9 +10,7 @@ public final class Meme {
     @JsonIgnore
     private Bitmap img;
     private int rating, my_score;
-    final public static int LIKED = 0, DISLIKED = 1, OTHER = 2;
-    @JsonIgnore
-    private int state = OTHER;
+    final public static int LIKED = 1, DISLIKED = -1, OTHER = 0;
 
     public Meme(long id, String img_url, Bitmap bitmap) {
         this.id = id;
@@ -24,10 +22,6 @@ public final class Meme {
         this.id = 0;
         this.img_url = null;
         this.img = null;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public void setMy_score(int my_score) {
@@ -42,14 +36,8 @@ public final class Meme {
         return my_score;
     }
 
-    public void setState(int s)
-    {
-        state = s;
-    }
-
-    public int getState()
-    {
-        return state;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public void setId(long id) {

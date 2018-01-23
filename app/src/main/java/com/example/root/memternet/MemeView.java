@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 public class MemeView extends CardView {
     TextView memeText;
     ImageView img;
+    final Runnable update;
 
-    MemeView(Context context) {
+    MemeView(Context context, Runnable update) {
         super(context);
+        this.update = update;
         final int margin = (int) (16 * context.getResources().getDisplayMetrics().density);
         img = new ImageView(context);
         setBackgroundColor(0xb3d9ff);
@@ -49,10 +52,10 @@ public class MemeView extends CardView {
         img.setImageBitmap(bitmap);
         final Button button1 = new Button(getContext());
         final Button button2 = new Button(getContext());
-        if (meme.getState() == Meme.LIKED) {
+        if (meme.getMy_score() == Meme.LIKED) {
             button1.setBackground(getResources().getDrawable(R.drawable.liked));
             button2.setBackground(getResources().getDrawable(R.drawable.downvote));
-        } else if (meme.getState() == Meme.DISLIKED) {
+        } else if (meme.getMy_score() == Meme.DISLIKED) {
             button1.setBackground(getResources().getDrawable(R.drawable.upvote));
             button2.setBackground(getResources().getDrawable(R.drawable.disliked));
         } else {
@@ -62,33 +65,43 @@ public class MemeView extends CardView {
         button1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (meme.getState() != Meme.LIKED) {
+                if (meme.getMy_score() != Meme.LIKED) {
                     button1.setBackground(getResources().getDrawable(R.drawable.liked));
-                    meme.setState(Meme.LIKED);
+                    meme.setRating(meme.getRating() - meme.getMy_score() + Meme.LIKED);
+                    memeText.setText(String.valueOf(meme.getRating()));
+                    meme.setMy_score(Meme.LIKED);
                     LikeSender.sendLike(meme.getId(), 1);
                 }
                 else {
                     button1.setBackground(getResources().getDrawable(R.drawable.upvote));
-                    meme.setState(Meme.OTHER);
+                    meme.setRating(meme.getRating() - meme.getMy_score());
+                    memeText.setText(String.valueOf(meme.getRating()));
+                    meme.setMy_score(Meme.OTHER);
                     LikeSender.sendLike(meme.getId(), 0);
                 }
                 button2.setBackground(getResources().getDrawable(R.drawable.downvote));
+                update.run();
             }
         });
         button2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (meme.getState() != Meme.DISLIKED) {
+                if (meme.getMy_score() != Meme.DISLIKED) {
                     button2.setBackground(getResources().getDrawable(R.drawable.disliked));
-                    meme.setState(Meme.DISLIKED);
+                    meme.setRating(meme.getRating() - meme.getMy_score() + Meme.DISLIKED);
+                    memeText.setText(String.valueOf(meme.getRating()));
+                    meme.setMy_score(Meme.DISLIKED);
                     LikeSender.sendLike(meme.getId(), -1);
                 }
                 else {
                     button2.setBackground(getResources().getDrawable(R.drawable.downvote));
-                    meme.setState(Meme.OTHER);
+                    meme.setRating(meme.getRating() - meme.getMy_score());
+                    memeText.setText(String.valueOf(meme.getRating()));
+                    meme.setMy_score(Meme.OTHER);
                     LikeSender.sendLike(meme.getId(), 0);
                 }
                 button1.setBackground(getResources().getDrawable(R.drawable.upvote));
+                update.run();
             }
         });
         int size = (int) (getContext().getResources().getDisplayMetrics().density * 25);
@@ -96,9 +109,16 @@ public class MemeView extends CardView {
         this.setLayoutParams(gen);
         LayoutParams lp = new LayoutParams(size, size, Gravity.BOTTOM);
         lp.setMargins(margin, 0, 0, margin / 3);
-        super.addView(button1, lp);
+        addView(button1, lp);
         LayoutParams lp2 = new LayoutParams(size, size, Gravity.BOTTOM);
         lp2.setMargins(2 * margin + size, 0, 0, 0);
-        super.addView(button2, lp2);
+        addView(button2, lp2);
+        TextView textView = new TextView(getContext());
+        LayoutParams lp3 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM);
+        lp3.setMargins(3 * margin + 2 * size, 0, 0, margin / 3);
+        textView.setText(String.valueOf(meme.getRating()));
+        textView.setTextSize(15);
+        addView(textView, lp3);
     }
 }

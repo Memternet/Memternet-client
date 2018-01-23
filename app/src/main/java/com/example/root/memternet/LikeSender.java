@@ -19,15 +19,14 @@ public class LikeSender {
     static final String LIKE_URL = "http://memes.kotim.ru/like/";
 
     public static void sendLike(final long id, final int score) {
-        new AsyncTask<Void, Void, Void>() {
-
+        new Thread(new Runnable() {
             @Override
-            protected Void doInBackground(Void... foo) {
+            public void run() {
                 try {
                     URL url = new URL(LIKE_URL + String.valueOf(id));
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Authorization", "Token " + Token.id);
+                    connection.setRequestProperty("Authorization", "Token " + Token.getId());
                     String data = "score=" + String.valueOf(score);
                     byte[] toSend = data.getBytes();
                     //connection.setRequestProperty("Content-Length", String.valueOf(toSend.length));
@@ -38,8 +37,7 @@ public class LikeSender {
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                 }
-                return null;
             }
-        }.execute();
+        }).start();
     }
 }

@@ -30,7 +30,7 @@ public class Loader {
                     "count=" +
                     String.valueOf(count));
             URLConnection connection = url.openConnection();
-            connection.setRequestProperty("Authorization", "Token " + Token.id);
+            connection.setRequestProperty("Authorization", "Token " + Token.getId());
             connection.connect();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder builder = new StringBuilder();
@@ -56,7 +56,7 @@ public class Loader {
         return Arrays.asList(memes.getMemes());
     }
 
-    public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to) {
+    public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to, boolean sortByRating) {
         if (lastId == 0)
             return;
         Log.d("geter", String.valueOf(lock));
@@ -72,8 +72,8 @@ public class Loader {
         //to.addAll(newMemes);
     }
 
-    public static void getMemes(int count, ArrayList<Meme> to) {
-        getMemes(lastId, count, to);
+    public static void getMemes(int count, ArrayList<Meme> to, boolean sortByRating) {
+        getMemes(lastId, count, to, sortByRating);
     }
 
     private static class MemeDownloader extends AsyncTask<Object, Void, List<Meme>[]> {

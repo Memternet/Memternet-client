@@ -1,4 +1,6 @@
 package com.example.root.memternet;
+
+import android.util.Log;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -8,7 +10,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.webkit.CookieSyncManager;
 
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -17,12 +25,13 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     MemeAdapter adapter;
+    RecyclerView posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final RecyclerView posts = findViewById(R.id.posts);
+        posts = findViewById(R.id.posts);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         posts.setLayoutManager(lm);
         adapter = (MemeAdapter) getLastCustomNonConfigurationInstance();
@@ -48,8 +57,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return adapter;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("mymenu", String.valueOf(item.getTitle()));
+        if (item.getItemId() == R.id.last) {
+            adapter = new MemeAdapter(false);
+            posts.setAdapter(adapter);
+        }
+        else if (item.getItemId() == R.id.top) {
+            adapter = new MemeAdapter(true);
+            posts.setAdapter(adapter);
+        }
+        else {
+            Token.mGoogleSignInClient.signOut();
+            startActivity(new Intent(this, AuthorisationActivity.class));
+        }
+        return false;
+    }
 }

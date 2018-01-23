@@ -13,16 +13,22 @@ import java.util.ArrayList;
 
 public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     ArrayList<Meme> data;
-    boolean needUpdate = false;
+    boolean needUpdate = false, sortByRating;
     public boolean isNeedUpdate() {
         return needUpdate;
     }
 
-    MemeAdapter() {
+    MemeAdapter(boolean sortByRating) {
         super();
         data = new ArrayList();
+        this.sortByRating = sortByRating;
     }
-    private static final int MEMECOUNT = 5;
+
+    MemeAdapter() {
+        this(false);
+    }
+
+    private static final int MEMECOUNT = 1;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         //TextView t;
@@ -37,7 +43,12 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
     @Override
     public MemeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        MemeView v = new MemeView(parent.getContext());
+        MemeView v = new MemeView(parent.getContext(), new Runnable() {
+            @Override
+            public void run() {
+                update();
+            }
+        });
         //TextView t = new TextView(parent.getContext());
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -49,7 +60,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         if (position >= data.size() && !needUpdate) {
             needUpdate = true;
             //Log.d("test", "test");
-            Loader.getMemes(MEMECOUNT, data);
+            Loader.getMemes(MEMECOUNT, data, sortByRating);
         }
         else if (position < data.size()) {
             holder.meme.setMeme(data.get(position));
