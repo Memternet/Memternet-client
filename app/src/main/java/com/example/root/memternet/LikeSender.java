@@ -18,7 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class LikeSender {
     static final String LIKE_URL = "http://memes.kotim.ru/like/";
 
-    public static void sendLike(final long id, final int score) {
+    public static void sendLike(final App app, final long id, final int score) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -26,7 +26,7 @@ public class LikeSender {
                     URL url = new URL(LIKE_URL + String.valueOf(id));
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Authorization", "Token " + Token.getId());
+                    connection.setRequestProperty("Authorization", "Token " + app.getId());
                     String data = "score=" + String.valueOf(score);
                     byte[] toSend = data.getBytes();
                     //connection.setRequestProperty("Content-Length", String.valueOf(toSend.length));

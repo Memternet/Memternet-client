@@ -17,9 +17,11 @@ public class MemeView extends CardView {
     TextView memeText;
     ImageView img;
     final Runnable update;
+    App app;
 
     MemeView(Context context, Runnable update) {
         super(context);
+        app = (App) context.getApplicationContext();
         this.update = update;
         final int margin = (int) (16 * context.getResources().getDisplayMetrics().density);
         img = new ImageView(context);
@@ -70,14 +72,14 @@ public class MemeView extends CardView {
                     meme.setRating(meme.getRating() - meme.getMy_score() + Meme.LIKED);
                     memeText.setText(String.valueOf(meme.getRating()));
                     meme.setMy_score(Meme.LIKED);
-                    LikeSender.sendLike(meme.getId(), 1);
+                    LikeSender.sendLike(app, meme.getId(), 1);
                 }
                 else {
                     button1.setBackground(getResources().getDrawable(R.drawable.upvote));
                     meme.setRating(meme.getRating() - meme.getMy_score());
                     memeText.setText(String.valueOf(meme.getRating()));
                     meme.setMy_score(Meme.OTHER);
-                    LikeSender.sendLike(meme.getId(), 0);
+                    LikeSender.sendLike(app, meme.getId(), 0);
                 }
                 button2.setBackground(getResources().getDrawable(R.drawable.downvote));
                 update.run();
@@ -91,14 +93,14 @@ public class MemeView extends CardView {
                     meme.setRating(meme.getRating() - meme.getMy_score() + Meme.DISLIKED);
                     memeText.setText(String.valueOf(meme.getRating()));
                     meme.setMy_score(Meme.DISLIKED);
-                    LikeSender.sendLike(meme.getId(), -1);
+                    LikeSender.sendLike(app, meme.getId(), -1);
                 }
                 else {
                     button2.setBackground(getResources().getDrawable(R.drawable.downvote));
                     meme.setRating(meme.getRating() - meme.getMy_score());
                     memeText.setText(String.valueOf(meme.getRating()));
                     meme.setMy_score(Meme.OTHER);
-                    LikeSender.sendLike(meme.getId(), 0);
+                    LikeSender.sendLike(app, meme.getId(), 0);
                 }
                 button1.setBackground(getResources().getDrawable(R.drawable.upvote));
                 update.run();

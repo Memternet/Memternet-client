@@ -26,17 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
     MemeAdapter adapter;
     RecyclerView posts;
+    App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        app = (App) getApplicationContext();
         posts = findViewById(R.id.posts);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         posts.setLayoutManager(lm);
         adapter = (MemeAdapter) getLastCustomNonConfigurationInstance();
         if (adapter == null)
-            adapter = new MemeAdapter();
+            adapter = new MemeAdapter(app);
         posts.setAdapter(adapter);
         final Handler h = new Handler() {
             @Override
@@ -71,15 +73,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("mymenu", String.valueOf(item.getTitle()));
         if (item.getItemId() == R.id.last) {
-            adapter = new MemeAdapter(false);
+            adapter = new MemeAdapter(app, false);
             posts.setAdapter(adapter);
         }
         else if (item.getItemId() == R.id.top) {
-            adapter = new MemeAdapter(true);
+            adapter = new MemeAdapter(app, true);
             posts.setAdapter(adapter);
         }
         else {
-            Token.mGoogleSignInClient.signOut();
+            app.mGoogleSignInClient.signOut();
             startActivity(new Intent(this, AuthorisationActivity.class));
         }
         return false;

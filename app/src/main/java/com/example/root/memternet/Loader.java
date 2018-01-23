@@ -18,7 +18,7 @@ public class Loader {
     private static final String SERVER_ADR = "http://memes.kotim.ru/memes/";
     private static boolean lock = false;
 
-    private static synchronized String getJSON(long startId, int count) {
+    private static synchronized String getJSON(App app, long startId, int count) {
         String ip = SERVER_ADR;
         String server_resp;
         try {
@@ -30,7 +30,7 @@ public class Loader {
                     "count=" +
                     String.valueOf(count));
             URLConnection connection = url.openConnection();
-            connection.setRequestProperty("Authorization", "Token " + Token.getId());
+            connection.setRequestProperty("Authorization", "Token " + app.getId());
             connection.connect();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder builder = new StringBuilder();
@@ -47,16 +47,16 @@ public class Loader {
         return server_resp;
     }
 
-    private static synchronized List<Meme> getUrls(long startId, int count) {
+    private static synchronized List<Meme> getUrls(App app, long startId, int count) {
         Log.d("async", "begin");
-        String server_resp = getJSON(startId, count);
+        String server_resp = getJSON(app, startId, count);
         MemeList memes = MemeList.parse(server_resp);
         if (memes == null)
             return new ArrayList<>();
         return Arrays.asList(memes.getMemes());
     }
 
-    public synchronized static void getMemes(Long startId, Integer count, ArrayList<Meme> to, boolean sortByRating) {
+    public synchronized static void getMemes(App app, Long startId, Integer count, ArrayList<Meme> to, boolean sortByRating) {
         if (lastId == 0)
             return;
         Log.d("geter", String.valueOf(lock));
@@ -68,12 +68,12 @@ public class Loader {
         for (int i = 0; i < count; i++) {
             newMemes.add(new Meme());
         }
-        (new MemeDownloader()).execute(startId, count, to);
+        (new MemeDownloader()).execute(startId, count, to, app);
         //to.addAll(newMemes);
     }
 
-    public static void getMemes(int count, ArrayList<Meme> to, boolean sortByRating) {
-        getMemes(lastId, count, to, sortByRating);
+    public static void getMemes(App app, int count, ArrayList<Meme> to, boolean sortByRating) {
+        getMemes(app, lastId, count, to, sortByRating);
     }
 
     private static class MemeDownloader extends AsyncTask<Object, Void, List<Meme>[]> {
@@ -96,8 +96,9 @@ public class Loader {
             Integer count = (Integer) params[1];
             //List<Meme> memes = (List<Meme>) params[2];
             List<Meme> to = (List<Meme>) params[2];
+            App app = (App) params[3];
             //ArrayList<String> urls = Loader.getUrls(startId, count);
-            List<Meme> memes = Loader.getUrls(startId, count);
+            List<Meme> memes = Loader.getUrls(app, startId, count);
             for (int i = 0; i < memes.size(); i++) {
                 try {
                     if (lastId == -1 || lastId >= memes.get(i).getId())
