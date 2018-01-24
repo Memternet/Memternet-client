@@ -11,6 +11,15 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 public class App extends Application {
     public GoogleSignInClient mGoogleSignInClient;
     public GoogleApiClient mGoogleApiClient;
+    private boolean started = false;
+
+    public void start() {
+        started = true;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
 
     public String getId() {
         OptionalPendingResult<GoogleSignInResult> opr =
@@ -19,7 +28,8 @@ public class App extends Application {
         if (result.isSuccess()) {
             try {
                 return result.getSignInAccount().getIdToken();
-            } catch (NullPointerException e) {
+            }
+            catch (NullPointerException e) {
                 return "-1";
             }
         } else {

@@ -107,7 +107,7 @@ public class MemeView extends CardView {
             }
         });
         int size = (int) (getContext().getResources().getDisplayMetrics().density * 25);
-        LayoutParams gen = new LayoutParams(bitmap.getWidth(), bitmap.getHeight() + size);
+        LayoutParams gen = new LayoutParams(bitmap.getWidth(), bitmap.getHeight() + 2 * size);
         this.setLayoutParams(gen);
         LayoutParams lp = new LayoutParams(size, size, Gravity.BOTTOM);
         lp.setMargins(margin, 0, 0, margin / 3);

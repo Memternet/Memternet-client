@@ -14,21 +14,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Loader {
-    private static long lastId = -1;
-    private static final String SERVER_ADR = "http://memes.kotim.ru/memes/";
-    private static boolean lock = false;
+    private static final String SERVER_ADR = "http://memes.kotim.ru/";
+    private static long last_id = -1, offset = 0;
 
-    private static synchronized String getJSON(App app, long startId, int count) {
-        String ip = SERVER_ADR;
-        String server_resp;
+    private static String getJSON(String req, App app) {
         try {
-            String startIdString = "";
-            Log.d("geter", String.valueOf(startId));
-            if (startId != -1)
-                startIdString = "start_id=" + String.valueOf(startId) + "&";
-            URL url = new URL(ip + "?" + startIdString +
-                    "count=" +
-                    String.valueOf(count));
+            Log.d("token", app.getId());
+            URL url = new URL(req);
             URLConnection connection = url.openConnection();
             connection.setRequestProperty("Authorization", "Token " + app.getId());
             connection.connect();
@@ -38,79 +30,67 @@ public class Loader {
             while ((line = in.readLine()) != null)
                 builder.append(line);
             in.close();
-            server_resp = builder.toString();
+            Log.d("token", "ok");
+            return builder.toString();
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return "{\"memes\":[]}";
         }
-        return server_resp;
     }
 
-    private static synchronized List<Meme> getUrls(App app, long startId, int count) {
-        Log.d("async", "begin");
-        String server_resp = getJSON(app, startId, count);
-        MemeList memes = MemeList.parse(server_resp);
-        if (memes == null)
-            return new ArrayList<>();
-        return Arrays.asList(memes.getMemes());
+    private static String makeTopReq(int count) {
+        String req = SERVER_ADR + "top/";
+        req += "?count=" + String.valueOf(count);
+        req += "&offset=" + String.valueOf(offset);
+        return req;
     }
 
-    public synchronized static void getMemes(App app, Long startId, Integer count, ArrayList<Meme> to, boolean sortByRating) {
-        if (lastId == 0)
-            return;
-        Log.d("geter", String.valueOf(lock));
-        if (lock)
-            return;
-        lock = true;
-        Log.d("geter", "start");
-        ArrayList<Meme> newMemes = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            newMemes.add(new Meme());
+    private static String makeLastReq(int count) {
+        String req = SERVER_ADR + "memes/";
+        req += "?count=" + String.valueOf(count);
+        if (last_id != -1) {
+            req += "&start_id=" + String.valueOf(last_id);
         }
-        (new MemeDownloader()).execute(startId, count, to, app);
-        //to.addAll(newMemes);
+        return req;
     }
 
     public static void getMemes(App app, int count, ArrayList<Meme> to, boolean sortByRating) {
-        getMemes(app, lastId, count, to, sortByRating);
+        if (!app.isStarted())
+            return;
+        (new ImgDownloader()).execute(app, Integer.valueOf(count), to, Boolean.valueOf(sortByRating));
     }
 
-    private static class MemeDownloader extends AsyncTask<Object, Void, List<Meme>[]> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(List<Meme>[] lists) {
-            super.onPostExecute(lists);
-            lists[0].addAll(lists[1]);
-            lock = false;
-            Log.d("geter", "end");
-        }
+    private static class ImgDownloader extends AsyncTask<Object, Void, List<Meme>[]> {
 
         @Override
         protected List<Meme>[] doInBackground(Object... params) {
-            Long startId = (Long) params[0];
+            App app = (App) params[0];
             Integer count = (Integer) params[1];
-            //List<Meme> memes = (List<Meme>) params[2];
-            List<Meme> to = (List<Meme>) params[2];
-            App app = (App) params[3];
-            //ArrayList<String> urls = Loader.getUrls(startId, count);
-            List<Meme> memes = Loader.getUrls(app, startId, count);
+            ArrayList<Meme> to = (ArrayList<Meme>) params[2];
+            Boolean sortByRating = (Boolean) params[3];
+            String server_resp;
+            if (sortByRating)
+                server_resp = getJSON(makeTopReq(count), app);
+            else
+                server_resp = getJSON(makeLastReq(count), app);
+            List<Meme> memes = Arrays.asList(MemeList.parse(server_resp).getMemes());
+            if (sortByRating)
+                offset += memes.size();
             for (int i = 0; i < memes.size(); i++) {
                 try {
-                    if (lastId == -1 || lastId >= memes.get(i).getId())
-                        lastId = memes.get(i).getId() - 1;
                     URL url = new URL(memes.get(i).getImg_url());
                     URLConnection connection = url.openConnection();
                     connection.connect();
-                    Log.d("img", "start");
+                    Log.d("bmp", "begin");
                     Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
-                    Log.d("img", "end");
+                    Log.d("bmp", "end");
                     memes.get(i).setImg(bitmap);
-                } catch (Exception e) {
+                    if (!sortByRating && (last_id == -1 || last_id >= memes.get(i).getId())) {
+                        last_id = memes.get(i).getId() - 1;
+                    }
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -118,6 +98,12 @@ public class Loader {
             ans[0] = to;
             ans[1] = memes;
             return ans;
+        }
+
+        @Override
+        protected void onPostExecute(List<Meme>[] memes) {
+            super.onPostExecute(memes);
+            memes[0].addAll(memes[1]);
         }
     }
 }

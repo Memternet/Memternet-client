@@ -41,7 +41,7 @@ public class AuthorisationActivity extends AppCompatActivity implements GoogleAp
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
+        app.start();
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -30,7 +30,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
         this(app, false);
     }
 
-    private static final int MEMECOUNT = 1;
+    private static final int MEMECOUNT = 5;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MemeView meme;
         //TextView t;
@@ -58,6 +58,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.d("size", String.valueOf(data.size()));
         holder.setIsRecyclable(false);
         if (position >= data.size() && !needUpdate) {
             needUpdate = true;
